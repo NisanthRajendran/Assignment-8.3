@@ -1,0 +1,57 @@
+Explain the architecture of apache hadoop yarn ?
+
+    *Apache hadoop YARN is a cluster management technology present in the second generation of hadoop.Its main function is to split
+     the functionalities of resource management and scheduling the jobs into separate nodes.
+    *The ResourceManager and the NodeManager form the data-computation framework.The resource manager allocates resources among 
+     all applications in system.The node manager works on a single machine and reports to resource manager about the resources 
+     used and the capacity of containers.
+     
+     The ResourceManager has two main components:
+      *Scheduler 
+      *Application master
+      
+     *SCHEDULER:
+            *It is the job of the YARN scheduler to allocate resources to applications according to some defined policy.
+            *It doesn't performs monitoring or tracking of status operations.
+            *It performs the work based on the resource requirements of the application.
+            *Three schedulers are available in YARN:
+                *FIFO 
+                *Capacity Schedulers and 
+                *Fair Schedulers.
+            FIFO Scheduler:
+                *The FIFO Scheduler places applications in a queue and runs them in the order of submission (first in, first out).
+                *Requests for the first application in the queue are allocated first; once its requests have been satisfied, 
+                  the next application in the queue is served, and so on.
+                *The FIFO Scheduler has the merit of being simple to understand and not needing any configuration, 
+                  but it’s not suitable for shared clusters.
+                *On a shared cluster, it is better to use the Capacity Scheduler or the Fair Scheduler. 
+           Capacity Scheduler:
+                *a separate dedicated queue allows the small job to start as soon as it is submitted.
+                *This is at the cost of overall cluster utilization since the queue capacity is reserved for jobs in that queue.
+                *If queues are not designed or used properly, some queues may be overloaded while some may be underutilised.
+                *Large job finishes late when compared with using the FIFO Scheduler.
+           Fair Scheduler:
+                *There is no need to reserve a set amount of capacity,since it will dynamically balance 
+                  resources between all running jobs. 
+                *Just after the first (large) job starts, it is the only job running, so it gets all the resources in the cluster.
+                *When the second (small) job starts, it is allocated half of the cluster resources,so that each job is using its fair share of resources.
+                *After the small job completes and no longer requires resources, the large job goes back to using 
+                  the full cluster capacity again.
+       *APPLICATION MASTER:
+             * It is responsible for accepting job-submissions, negotiating the first container for executing the application specific 
+                Application Master and provides the service for restarting the Application Master container on failure.
+          
+          
+       *NODE MANAGER:
+          *It is responsible for accepting job-submissions, negotiating the first container for executing the application 
+            specific Application Master and provides the service for restarting the ApplicationMaster container on failure.
+          *NodeManagers are much like TaskTrackers in earlier versions of Hadoop. 
+           Whereas TaskTrackers used a fixed number of map and reduce slots for scheduling, 
+           NodeManagers have a number of dynamically created, arbitrarily-sized Resource Containers (RCs).
+           Unlike slots in MR1, RCs can be used for map tasks, reduce tasks, or tasks from other frameworks.  
+           
+       *CONTAINERS:
+          *It represents a collection of physical resources meaning CPU cores, disk along with RAM.
+          *When an application is about to get submitted into the YARN platform, 
+            the YarnClient allocates a container from the ResourceManager, where its ApplicationMaster will run 
+
